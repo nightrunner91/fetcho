@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Video Downloader</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="popup">
+      <header>
+        <h1>Video Downloader</h1>
+      </header>
+
+      <main>
+        <div id="detected-section" class="hidden">
+          <div id="platform-badge" class="badge"></div>
+          <div id="detected-url" class="url-display"></div>
+        </div>
+
+        <div class="divider">
+          <span>or paste manually</span>
+        </div>
+
+        <div class="input-row">
+          <input
+            type="text"
+            id="url-input"
+            placeholder="https://..."
+            autocomplete="off"
+          />
+        </div>
+
+        <div id="status" class="status"></div>
+
+        <div class="actions">
+          <button id="download-btn" class="btn btn-primary">Download</button>
+          <button id="cancel-btn" class="btn btn-secondary hidden">Cancel</button>
+        </div>
+      </main>
+
+      <footer>
+        <span id="version"></span>
+      </footer>
+    </div>
+
+    <script type="module" src="index.ts"></script>
+  </body>
+</html>
