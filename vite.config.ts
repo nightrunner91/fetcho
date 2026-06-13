@@ -4,7 +4,7 @@ import { join } from "path";
 
 const manifest = defineManifest(async () => ({
   manifest_version: 3,
-  name: "Video Downloader",
+  name: "Fetcho",
   description: "Auto-download videos from Instagram, Twitter/X, and YouTube Shorts",
   version: "1.0.0",
   action: {

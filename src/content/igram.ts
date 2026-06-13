@@ -17,7 +17,7 @@ async function autoFillAndDownload() {
     document.querySelector<HTMLTextAreaElement>("textarea");
 
   if (!input) {
-    console.error("Video Downloader: Could not find input field on igram.world");
+    console.error("Fetcho: Could not find input field on igram.world");
     return;
   }
 

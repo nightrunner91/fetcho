@@ -17,7 +17,7 @@ async function autoFillAndDownload() {
     document.querySelector<HTMLInputElement>('input[type="url"]');
 
   if (!input) {
-    console.error("Video Downloader: Could not find input field on ssstwitter.com");
+    console.error("Fetcho: Could not find input field on ssstwitter.com");
     return;
   }
 

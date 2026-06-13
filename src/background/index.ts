@@ -1,3 +1,3 @@
 chrome.runtime.onInstalled.addListener(() => {
-  console.log("Video Downloader extension installed");
+  console.log("Fetcho extension installed");
 });

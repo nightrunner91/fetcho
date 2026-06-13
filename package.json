@@ -1,5 +1,5 @@
 {
-  "name": "video-downloader-ext",
+  "name": "fetcho",
   "version": "1.0.0",
   "description": "Browser extension to auto-download videos from Instagram, Twitter/X, and YouTube Shorts",
   "type": "module",
