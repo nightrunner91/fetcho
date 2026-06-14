@@ -6,7 +6,6 @@ const platformBadge = document.getElementById("platform-badge")!;
 const urlInput = document.getElementById("url-input") as HTMLInputElement;
 const downloadBtn = document.getElementById("download-btn") as HTMLButtonElement;
 const cancelBtn = document.getElementById("cancel-btn") as HTMLButtonElement;
-const statusEl = document.getElementById("status")!;
 const tipText = document.getElementById("tip-text")!;
 const versionEl = document.getElementById("version")!;
 
@@ -44,7 +43,7 @@ function handleDetectedUrl(url: string) {
   const platform = detectPlatform(url);
   if (!platform) {
     setState("error");
-    statusEl.textContent = "Unsupported platform. Paste URL manually below.";
+    console.log("Unsupported platform. Paste URL manually below.");
     urlInput.value = url;
     return;
   }
@@ -76,22 +75,19 @@ function startCountdown(platform: ReturnType<typeof detectPlatform>) {
 }
 
 function updateCountdownStatus() {
-  statusEl.textContent = `Opening in ${countdownSeconds}s...`;
+  console.log(`Opening in ${countdownSeconds}s...`);
   cancelBtn.classList.remove("hidden");
 }
 
 function setState(state: PopupState) {
-  statusEl.className = "status";
   if (state === "idle") {
     tipText.textContent = "Paste a video link to get started";
-    statusEl.textContent = "";
     downloadBtn.disabled = true;
   } else if (state === "detected" || state === "loading") {
     tipText.textContent = "";
     downloadBtn.disabled = false;
   } else if (state === "error") {
     tipText.textContent = "";
-    statusEl.classList.add("error");
     downloadBtn.disabled = false;
   }
 }
@@ -99,15 +95,13 @@ function setState(state: PopupState) {
 async function triggerDownload() {
   const url = urlInput.value.trim() || currentUrl;
   if (!url || !isValidUrl(url)) {
-    statusEl.textContent = "Please enter a valid URL";
-    statusEl.classList.add("error");
+    console.log("Please enter a valid URL");
     return;
   }
 
   const platform = detectPlatform(url);
   if (!platform) {
-    statusEl.textContent = "Unsupported platform";
-    statusEl.classList.add("error");
+    console.log("Unsupported platform");
     return;
   }
 
@@ -116,8 +110,7 @@ async function triggerDownload() {
     countdownTimer = null;
   }
 
-  statusEl.textContent = `Opening ${platform.name} downloader...`;
-  statusEl.className = "status";
+  console.log(`Opening ${platform.name} downloader...`);
 
   await chrome.storage.local.set({ downloadUrl: url, platformId: platform.id });
 
@@ -134,7 +127,7 @@ cancelBtn.addEventListener("click", () => {
     countdownTimer = null;
   }
   cancelBtn.classList.add("hidden");
-  statusEl.textContent = "Auto-trigger cancelled. Click Download to proceed.";
+  console.log("Auto-trigger cancelled. Click Download to proceed.");
   setState("detected");
 });
 
@@ -146,7 +139,6 @@ urlInput.addEventListener("input", () => {
     countdownTimer = null;
   }
   cancelBtn.classList.add("hidden");
-  statusEl.textContent = "";
 
   if (url && isValidUrl(url)) {
     const platform = detectPlatform(url);
