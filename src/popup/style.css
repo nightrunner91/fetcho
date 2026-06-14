@@ -196,7 +196,7 @@ main {
 
 .paste-btn {
   position: absolute;
-  right: 4px;
+  right: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -275,6 +275,9 @@ footer {
   color: var(--text-secondary);
   text-decoration: none;
   transition: color 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 #github-link:hover {
