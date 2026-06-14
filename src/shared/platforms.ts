@@ -6,21 +6,21 @@ export const platforms: PlatformConfig[] = [
     name: "Instagram",
     patterns: [/instagram\.com/i, /instagr\.am/i],
     targetUrl: "https://igram.world/en1/",
-    color: "#E1306C",
+    color: "#e1306c",
   },
   {
     id: "twitter",
     name: "Twitter/X",
     patterns: [/twitter\.com/i, /x\.com/i],
     targetUrl: "https://ssstwitter.com/",
-    color: "#1DA1F2",
+    color: "#000000",
   },
   {
     id: "youtube",
     name: "YouTube Shorts",
     patterns: [/youtube\.com\/shorts/i, /youtu\.be/i],
     targetUrl: "https://ytshortsdl.io/",
-    color: "#FF0000",
+    color: "#FE0032",
   },
 ];
 

@@ -76,10 +76,10 @@ main {
 .badge {
   display: inline-flex;
   align-items: center;
-  padding: 0 8px 2px;
+  padding: 0 8px 1px;
   height: 20px;
   border-radius: 12px;
-  font-size: 12px;
+  font-size: 11px;
   line-height: 1;
   font-weight: 500;
   color: #fff;
@@ -98,7 +98,7 @@ main {
   align-items: center;
   gap: 3px;
   height: 20px;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-secondary);
 }
 
