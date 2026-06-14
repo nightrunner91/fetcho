@@ -22,6 +22,27 @@ export const platforms: PlatformConfig[] = [
     targetUrl: "https://ytshortsdl.io/",
     color: "#FE0032",
   },
+  {
+    id: "tiktok",
+    name: "TikTok",
+    patterns: [/tiktok\.com/i],
+    targetUrl: "https://ssstik.io/",
+    color: "#000000",
+  },
+  {
+    id: "reddit",
+    name: "Reddit",
+    patterns: [/reddit\.com/i],
+    targetUrl: "https://rapidsave.com/",
+    color: "#FC4603",
+  },
+  {
+    id: "facebook",
+    name: "Facebook",
+    patterns: [/facebook\.com/i, /fb\.com/i, /fb\.watch/i],
+    targetUrl: "https://fdown.net/",
+    color: "#0667FC",
+  },
 ];
 
 export function detectPlatform(url: string): PlatformConfig | null {

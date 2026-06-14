@@ -5,7 +5,7 @@ import { join } from "path";
 const manifest = defineManifest(async () => ({
   manifest_version: 3,
   name: "Fetcho",
-  description: "Auto-download videos from Instagram, Twitter/X, and YouTube Shorts",
+  description: "Auto-download videos from Instagram, Twitter/X, YouTube Shorts, TikTok, Reddit, and Facebook",
   version: "1.0.0",
   action: {
     default_popup: "src/popup/index.html",
@@ -32,12 +32,27 @@ const manifest = defineManifest(async () => ({
       matches: ["https://ytshortsdl.io/*"],
       js: ["src/content/ytshorts.ts"],
     },
+    {
+      matches: ["https://ssstik.io/*"],
+      js: ["src/content/snaptik.ts"],
+    },
+    {
+      matches: ["https://rapidsave.com/*"],
+      js: ["src/content/rapidsave.ts"],
+    },
+    {
+      matches: ["https://fdown.net/*"],
+      js: ["src/content/fdown.ts"],
+    },
   ],
   permissions: ["clipboardRead", "storage", "tabs"],
   host_permissions: [
     "https://igram.world/*",
     "https://ssstwitter.com/*",
     "https://ytshortsdl.io/*",
+    "https://ssstik.io/*",
+    "https://rapidsave.com/*",
+    "https://fdown.net/*",
   ],
   icons: {
     "16": "src/assets/icon16.png",
