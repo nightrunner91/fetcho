@@ -10,6 +10,7 @@ const tipText = document.getElementById("tip-text")!;
 const versionEl = document.getElementById("version")!;
 
 let currentUrl = "";
+let tipTimeout: ReturnType<typeof setTimeout> | null = null;
 
 const manifest = chrome.runtime.getManifest();
 versionEl.textContent = `v${manifest.version}`;
@@ -27,7 +28,19 @@ function isValidUrl(str: string): boolean {
   }
 }
 
+function setTip(msg: string, autoClear = true) {
+  if (tipTimeout) clearTimeout(tipTimeout);
+  tipText.textContent = msg;
+  if (autoClear) {
+    tipTimeout = setTimeout(() => {
+      tipText.textContent = "Paste a video link to get started";
+      tipTimeout = null;
+    }, 3000);
+  }
+}
+
 function setState(state: PopupState) {
+  if (tipTimeout) clearTimeout(tipTimeout);
   if (state === "idle") {
     tipText.textContent = "Paste a video link to get started";
     downloadBtn.disabled = true;
@@ -43,17 +56,17 @@ function setState(state: PopupState) {
 async function triggerDownload() {
   const url = urlInput.value.trim() || currentUrl;
   if (!url || !isValidUrl(url)) {
-    console.log("Please enter a valid URL");
+    setTip("Please enter a valid URL");
     return;
   }
 
   const platform = detectPlatform(url);
   if (!platform) {
-    console.log("Unsupported platform");
+    setTip("Unsupported platform");
     return;
   }
 
-  console.log(`Opening ${platform.name} downloader...`);
+  setTip(`Opening ${platform.name} downloader...`, false);
 
   await chrome.storage.local.set({ downloadUrl: url, platformId: platform.id });
 
@@ -71,7 +84,7 @@ pasteBtn.addEventListener("click", async () => {
       urlInput.dispatchEvent(new Event("input", { bubbles: true }));
     }
   } catch {
-    console.log("Could not read clipboard");
+    setTip("Could not read clipboard");
   }
 });
 
@@ -88,7 +101,17 @@ urlInput.addEventListener("input", () => {
       detectedSection.classList.remove("hidden");
       platformBadge.textContent = platform.name;
       platformBadge.style.backgroundColor = platform.color;
+      setTip(`${platform.name} detected ✓`, false);
+    } else {
+      detectedSection.classList.add("hidden");
+      setTip("URL not supported yet");
     }
+  } else if (url && !isValidUrl(url)) {
+    detectedSection.classList.add("hidden");
+    setTip("Invalid URL format");
+  } else {
+    detectedSection.classList.add("hidden");
+    setState("idle");
   }
 });
 
