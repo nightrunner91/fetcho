@@ -1,6 +1,6 @@
 {
   "name": "fetcho",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Browser extension to auto-download videos from Instagram, Twitter/X, and YouTube Shorts",
   "type": "module",
   "scripts": {
