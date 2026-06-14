@@ -1,34 +1,9 @@
-import { waitForElement, fillInput, findButton, delay } from "../shared/content-utils";
+import { runContentScript } from "./content-factory";
 
-async function autoFillAndDownload() {
-  const data = await chrome.storage.local.get(["downloadUrl", "platformId"]);
-  const downloadUrl = data.downloadUrl as string | undefined;
-  const platformId = data.platformId as string | undefined;
-
-  if (!downloadUrl || platformId !== "reddit") return;
-
-  await chrome.storage.local.remove(["downloadUrl", "platformId"]);
-
-  await waitForElement('input[type="text"], input[type="url"], #url', 5000);
-
-  const input =
-    document.querySelector<HTMLInputElement>("#url") ||
-    document.querySelector<HTMLInputElement>('input[type="text"]') ||
-    document.querySelector<HTMLInputElement>('input[type="url"]');
-
-  if (!input) {
-    console.error("Fetcho: Could not find input field on rapidsave.com");
-    return;
-  }
-
-  fillInput(input, downloadUrl);
-
-  await delay(500);
-
-  const downloadBtn = findButton(/download|submit|search|get/i);
-  if (downloadBtn) {
-    downloadBtn.click();
-  }
-}
-
-autoFillAndDownload();
+runContentScript({
+  platformId: "reddit",
+  waitSelector: 'input[type="text"], input[type="url"], #url',
+  inputSelectors: ["#url", 'input[type="text"]', 'input[type="url"]'],
+  buttonPattern: /download|submit|search|get/i,
+  siteName: "rapidsave.com",
+});

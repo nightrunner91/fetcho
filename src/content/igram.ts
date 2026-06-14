@@ -1,34 +1,9 @@
-import { waitForElement, fillInput, findButton, delay } from "../shared/content-utils";
+import { runContentScript } from "./content-factory";
 
-async function autoFillAndDownload() {
-  const data = await chrome.storage.local.get(["downloadUrl", "platformId"]);
-  const downloadUrl = data.downloadUrl as string | undefined;
-  const platformId = data.platformId as string | undefined;
-
-  if (!downloadUrl || platformId !== "instagram") return;
-
-  await chrome.storage.local.remove(["downloadUrl", "platformId"]);
-
-  await waitForElement('input[type="text"], input[type="url"], textarea', 5000);
-
-  const input =
-    document.querySelector<HTMLInputElement>('input[type="text"]') ||
-    document.querySelector<HTMLInputElement>('input[type="url"]') ||
-    document.querySelector<HTMLTextAreaElement>("textarea");
-
-  if (!input) {
-    console.error("Fetcho: Could not find input field on igram.world");
-    return;
-  }
-
-  fillInput(input, downloadUrl);
-
-  await delay(500);
-
-  const downloadBtn = findButton(/download|grab|fetch/i);
-  if (downloadBtn) {
-    downloadBtn.click();
-  }
-}
-
-autoFillAndDownload();
+runContentScript({
+  platformId: "instagram",
+  waitSelector: 'input[type="text"], input[type="url"], textarea',
+  inputSelectors: ['input[type="text"]', 'input[type="url"]', "textarea"],
+  buttonPattern: /download|grab|fetch/i,
+  siteName: "igram.world",
+});

@@ -12,3 +12,11 @@ export interface DetectedLink {
 }
 
 export type PopupState = "idle" | "detected" | "error";
+
+export interface ContentPlatformConfig {
+  platformId: string;
+  waitSelector: string;
+  inputSelectors: string[];
+  buttonPattern: RegExp;
+  siteName: string;
+}
