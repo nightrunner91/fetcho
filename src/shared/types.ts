@@ -11,4 +11,4 @@ export interface DetectedLink {
   url: string;
 }
 
-export type PopupState = "idle" | "detected" | "error" | "loading";
+export type PopupState = "idle" | "detected" | "error";

@@ -126,9 +126,15 @@ main {
   background: var(--border);
 }
 
+.input-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
 .input-row input {
   width: 100%;
-  padding: 8px 12px;
+  padding: 8px 32px 8px 12px;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   font-size: 13px;
@@ -139,6 +145,27 @@ main {
 
 .input-row input:focus {
   border-color: var(--primary);
+}
+
+.paste-btn {
+  position: absolute;
+  right: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-secondary);
+  border-radius: 4px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.paste-btn:hover {
+  color: var(--primary);
+  background: var(--bg);
 }
 
 .actions {

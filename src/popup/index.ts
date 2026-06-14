@@ -1,32 +1,20 @@
-import { detectPlatform, platforms } from "../shared/platforms";
+import { detectPlatform } from "../shared/platforms";
 import { PopupState } from "../shared/types";
 
 const detectedSection = document.getElementById("detected-section")!;
 const platformBadge = document.getElementById("platform-badge")!;
 const urlInput = document.getElementById("url-input") as HTMLInputElement;
+const pasteBtn = document.getElementById("paste-btn") as HTMLButtonElement;
 const downloadBtn = document.getElementById("download-btn") as HTMLButtonElement;
-const cancelBtn = document.getElementById("cancel-btn") as HTMLButtonElement;
 const tipText = document.getElementById("tip-text")!;
 const versionEl = document.getElementById("version")!;
 
-let countdownTimer: ReturnType<typeof setTimeout> | null = null;
 let currentUrl = "";
-let countdownSeconds = 3;
 
 const manifest = chrome.runtime.getManifest();
 versionEl.textContent = `v${manifest.version}`;
 
 async function init() {
-  try {
-    const text = await navigator.clipboard.readText();
-    const trimmed = text.trim();
-    if (trimmed && isValidUrl(trimmed)) {
-      handleDetectedUrl(trimmed);
-      return;
-    }
-  } catch {
-    // Clipboard permission denied or empty
-  }
   setState("idle");
 }
 
@@ -39,51 +27,11 @@ function isValidUrl(str: string): boolean {
   }
 }
 
-function handleDetectedUrl(url: string) {
-  const platform = detectPlatform(url);
-  if (!platform) {
-    setState("error");
-    console.log("Unsupported platform. Paste URL manually below.");
-    urlInput.value = url;
-    return;
-  }
-
-  currentUrl = url;
-  detectedSection.classList.remove("hidden");
-  platformBadge.textContent = platform.name;
-  platformBadge.style.backgroundColor = platform.color;
-  urlInput.value = url;
-
-  startCountdown(platform);
-}
-
-function startCountdown(platform: ReturnType<typeof detectPlatform>) {
-  if (!platform) return;
-  countdownSeconds = 3;
-  setState("loading");
-  updateCountdownStatus();
-
-  countdownTimer = setInterval(() => {
-    countdownSeconds--;
-    if (countdownSeconds <= 0) {
-      clearInterval(countdownTimer!);
-      triggerDownload();
-    } else {
-      updateCountdownStatus();
-    }
-  }, 1000);
-}
-
-function updateCountdownStatus() {
-  console.log(`Opening in ${countdownSeconds}s...`);
-  cancelBtn.classList.remove("hidden");
-}
-
 function setState(state: PopupState) {
   if (state === "idle") {
     tipText.textContent = "Paste a video link to get started";
     downloadBtn.disabled = true;
-  } else if (state === "detected" || state === "loading") {
+  } else if (state === "detected") {
     tipText.textContent = "";
     downloadBtn.disabled = false;
   } else if (state === "error") {
@@ -105,11 +53,6 @@ async function triggerDownload() {
     return;
   }
 
-  if (countdownTimer) {
-    clearInterval(countdownTimer);
-    countdownTimer = null;
-  }
-
   console.log(`Opening ${platform.name} downloader...`);
 
   await chrome.storage.local.set({ downloadUrl: url, platformId: platform.id });
@@ -119,26 +62,24 @@ async function triggerDownload() {
   window.close();
 }
 
-downloadBtn.addEventListener("click", triggerDownload);
-
-cancelBtn.addEventListener("click", () => {
-  if (countdownTimer) {
-    clearInterval(countdownTimer);
-    countdownTimer = null;
+pasteBtn.addEventListener("click", async () => {
+  try {
+    const text = await navigator.clipboard.readText();
+    const trimmed = text.trim();
+    if (trimmed) {
+      urlInput.value = trimmed;
+      urlInput.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+  } catch {
+    console.log("Could not read clipboard");
   }
-  cancelBtn.classList.add("hidden");
-  console.log("Auto-trigger cancelled. Click Download to proceed.");
-  setState("detected");
 });
+
+downloadBtn.addEventListener("click", triggerDownload);
 
 urlInput.addEventListener("input", () => {
   const url = urlInput.value.trim();
   downloadBtn.disabled = !url;
-  if (countdownTimer) {
-    clearInterval(countdownTimer);
-    countdownTimer = null;
-  }
-  cancelBtn.classList.add("hidden");
 
   if (url && isValidUrl(url)) {
     const platform = detectPlatform(url);

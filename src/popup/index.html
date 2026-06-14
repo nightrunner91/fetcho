@@ -28,6 +28,12 @@
     <main>
       <div class="input-row">
         <input type="text" id="url-input" placeholder="https://..." autocomplete="off" />
+        <button id="paste-btn" class="paste-btn" title="Paste from clipboard">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+          </svg>
+        </button>
       </div>
 
       <div class="tip-row">
@@ -39,7 +45,6 @@
 
       <div class="actions">
         <button id="download-btn" class="btn btn-primary">Download</button>
-        <button id="cancel-btn" class="btn btn-secondary hidden">Cancel</button>
       </div>
     </main>
 
