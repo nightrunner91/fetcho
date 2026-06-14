@@ -1,12 +1,11 @@
-# Fetcho
+# <p align="center">Fetcho</p>
 
 <p align="center">
   <strong>A Chromium browser extension that simplifies video downloads from social media.</strong>
 </p>
 
 <p align="center">
-  <a href="README.md"><img src="https://img.shields.io/badge/EN-English-blue?style=flat-square" alt="English"></a>
-  <a href="README.ru.md"><img src="https://img.shields.io/badge/RU-Russian-lightgrey?style=flat-square" alt="Russian"></a>
+  <strong><img src="https://flagcdn.com/w20/us.png" width="20"> English</strong> | <a href="README.ru.md"><img src="https://flagcdn.com/w20/ru.png" width="20"> Russian</a>
 </p>
 
 <p align="center">
@@ -64,7 +63,7 @@ Six platforms are supported out of the box.
 - **Dark / Light theme** -- toggle persisted to `chrome.storage.local`; respects OS-level preference
 - **Minimal popup UI** -- tiny popup with straightforward functionality, nothing extraneous or distracting
 
-### Load into Browser
+## Load into Browser
 
 1. Download latest release of Fetcho and unpack it
 2. Open `chrome://extensions` or `brave://extensions` in your browser
@@ -249,4 +248,10 @@ Contributions are welcome. Please open an issue first to discuss the change you 
 
 ## License
 
-MIT
+This project is licensed under the [ISC License](LICENSE).
+
+---
+
+<p align="center">
+  Built with ❤ by <a href="https://t.me/nightrunner91">nightrunner91</a>
+</p>

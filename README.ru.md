@@ -1,12 +1,11 @@
-# Fetcho
+# <p align="center">Fetcho</p>
 
 <p align="center">
   <strong>Браузерное расширение для Chromium, упрощающее скачивание видео из социальных сетей.</strong>
 </p>
 
 <p align="center">
-  <a href="README.md"><img src="https://img.shields.io/badge/EN-English-blue?style=flat-square" alt="English"></a>
-  <a href="README.ru.md"><img src="https://img.shields.io/badge/RU-Russian-lightgrey?style=flat-square" alt="Russian"></a>
+  <a href="README.md"><img src="https://flagcdn.com/w20/us.png" width="20"> English</a> | <strong><img src="https://flagcdn.com/w20/ru.png" width="20"> Русский</strong>
 </p>
 
 <p align="center">
@@ -65,7 +64,7 @@ Fetcho — лёгкое расширение для браузера Chromium (M
 - **Тёмная / Светлая тема** -- переключение сохраняется в `chrome.storage.local`; учитывает системные настройки
 - **Минималистичный попап** -- крохотный popup с очень простым функционалом - ничего лишнего и отвлекающего
 
-### Загрузка в браузер
+## Загрузка в браузер
 
 1. Скачайте последний релиз Fetcho и распакуйте его
 2. Откройте браузер и перейдите на `chrome://extensions` или `brave://extensions`
@@ -250,4 +249,10 @@ npm run preview
 
 ## Лицензия
 
-MIT
+Этот проект распространяется под лицензией [ISC](LICENSE).
+
+---
+
+<p align="center">
+  Сделано c ❤ <a href="https://t.me/nightrunner91">nightrunner91</a>
+</p>
