@@ -9,6 +9,7 @@ const pasteBtn = document.getElementById("paste-btn") as HTMLButtonElement;
 const downloadBtn = document.getElementById("download-btn") as HTMLButtonElement;
 const tipText = document.getElementById("tip-text")!;
 const versionEl = document.getElementById("version")!;
+const themeToggle = document.getElementById("theme-toggle") as HTMLButtonElement;
 
 let currentUrl = "";
 let tipTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -16,7 +17,43 @@ let tipTimeout: ReturnType<typeof setTimeout> | null = null;
 const manifest = chrome.runtime.getManifest();
 versionEl.textContent = `v${manifest.version}`;
 
+const STORAGE_THEME_KEY = "theme";
+
+function getPreferredTheme(): "light" | "dark" {
+  if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    return "dark";
+  }
+  return "light";
+}
+
+async function setTheme(theme: "light" | "dark") {
+  document.documentElement.setAttribute("data-theme", theme);
+  themeToggle.setAttribute("aria-checked", String(theme === "dark"));
+  await chrome.storage.local.set({ [STORAGE_THEME_KEY]: theme });
+}
+
+async function toggleTheme() {
+  const current = document.documentElement.getAttribute("data-theme") || "light";
+  await setTheme(current === "dark" ? "light" : "dark");
+}
+
+async function initTheme() {
+  const result = await chrome.storage.local.get(STORAGE_THEME_KEY);
+  const saved = result[STORAGE_THEME_KEY] as string | undefined;
+  if (saved === "light" || saved === "dark") {
+    document.documentElement.setAttribute("data-theme", saved);
+    themeToggle.setAttribute("aria-checked", String(saved === "dark"));
+  } else {
+    const preferred = getPreferredTheme();
+    document.documentElement.setAttribute("data-theme", preferred);
+    themeToggle.setAttribute("aria-checked", String(preferred === "dark"));
+  }
+}
+
+themeToggle.addEventListener("click", toggleTheme);
+
 async function init() {
+  await initTheme();
   setState("idle");
 }
 
