@@ -37,9 +37,32 @@ header {
   border-bottom: 1px solid var(--border);
 }
 
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 header h1 {
   font-size: 16px;
   font-weight: 500;
+}
+
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: var(--text-secondary);
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+
+.icon-btn:hover {
+  background: var(--bg);
 }
 
 main {
@@ -58,7 +81,18 @@ main {
   font-size: 12px;
   font-weight: 500;
   color: #fff;
-  margin-bottom: 8px;
+}
+
+.tip-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.tip {
+  font-size: 12px;
+  color: var(--text-secondary);
 }
 
 .url-display {
@@ -156,9 +190,24 @@ main {
 
 footer {
   padding: 8px 16px;
-  text-align: right;
   font-size: 11px;
   color: var(--text-secondary);
   border-top: 1px solid var(--border);
   background: var(--surface);
+}
+
+.footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#github-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+#github-link:hover {
+  color: var(--primary);
 }

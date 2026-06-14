@@ -3,11 +3,11 @@ import { PopupState } from "../shared/types";
 
 const detectedSection = document.getElementById("detected-section")!;
 const platformBadge = document.getElementById("platform-badge")!;
-const detectedUrl = document.getElementById("detected-url")!;
 const urlInput = document.getElementById("url-input") as HTMLInputElement;
 const downloadBtn = document.getElementById("download-btn") as HTMLButtonElement;
 const cancelBtn = document.getElementById("cancel-btn") as HTMLButtonElement;
 const statusEl = document.getElementById("status")!;
+const tipText = document.getElementById("tip-text")!;
 const versionEl = document.getElementById("version")!;
 
 let countdownTimer: ReturnType<typeof setTimeout> | null = null;
@@ -53,7 +53,6 @@ function handleDetectedUrl(url: string) {
   detectedSection.classList.remove("hidden");
   platformBadge.textContent = platform.name;
   platformBadge.style.backgroundColor = platform.color;
-  detectedUrl.textContent = url;
   urlInput.value = url;
 
   startCountdown(platform);
@@ -84,11 +83,14 @@ function updateCountdownStatus() {
 function setState(state: PopupState) {
   statusEl.className = "status";
   if (state === "idle") {
-    statusEl.textContent = "Paste a video link to get started";
+    tipText.textContent = "Paste a video link to get started";
+    statusEl.textContent = "";
     downloadBtn.disabled = true;
   } else if (state === "detected" || state === "loading") {
+    tipText.textContent = "";
     downloadBtn.disabled = false;
   } else if (state === "error") {
+    tipText.textContent = "";
     statusEl.classList.add("error");
     downloadBtn.disabled = false;
   }
@@ -153,7 +155,6 @@ urlInput.addEventListener("input", () => {
       detectedSection.classList.remove("hidden");
       platformBadge.textContent = platform.name;
       platformBadge.style.backgroundColor = platform.color;
-      detectedUrl.textContent = url;
     }
   }
 });
