@@ -1,11 +1,12 @@
-# <p align="center">Fetcho</p>
+# Fetcho
 
 <p align="center">
-  <strong>A Chromium browser extension that automates video downloads from social media.</strong>
+  <strong>A Chromium browser extension that simplifies video downloads from social media.</strong>
 </p>
 
 <p align="center">
-  <strong><img src="https://flagcdn.com/w20/us.png" width="20"> English</strong> | <a href="README.ru.md"><img src="https://flagcdn.com/w20/ru.png" width="20"> Russian</a>
+  <a href="README.md"><img src="https://img.shields.io/badge/EN-English-blue?style=flat-square" alt="English"></a>
+  <a href="README.ru.md"><img src="https://img.shields.io/badge/RU-Russian-lightgrey?style=flat-square" alt="Russian"></a>
 </p>
 
 <p align="center">
@@ -29,56 +30,118 @@
   - [Load into Browser](#load-into-browser)
 - [Usage](#usage)
 - [How It Works](#how-it-works)
+  - [Popup Flow](#popup-flow)
+  - [Content Script Automation](#content-script-automation)
+- [Configuration](#configuration)
 - [Permissions](#permissions)
 - [Development](#development)
+- [Contributing](#contributing)
 - [License](#license)
 
 ## Overview
 
-Fetcho is a lightweight browser extension built with TypeScript and Vite. It detects video URLs from your clipboard, identifies the platform (Instagram, Twitter/X, or YouTube Shorts), and automatically routes them to the appropriate downloader service. A 3-second countdown gives you a chance to cancel before the download flow begins.
+Fetcho is a lightweight Chromium browser extension (Manifest V3). It acts as a smart intermediary: you paste a video link, Fetcho opens the correct downloader site with that link pre-filled, and a content script clicks the download button for you. No manual tab-hopping, no copy-paste between sites.
+
+Six platforms are supported out of the box.
+
+| Platform | URL Patterns | Routes To |
+|---|---|---|
+| Instagram | `instagram.com`, `instagr.am` | `igram.world` |
+| Twitter / X | `twitter.com`, `x.com` | `ssstwitter.com` |
+| YouTube Shorts | `youtube.com/shorts`, `youtu.be` | `ytshortsdl.io` |
+| TikTok | `tiktok.com` | `ssstik.io` |
+| Reddit | `reddit.com` | `rapidsave.com` |
+| Facebook | `facebook.com`, `fb.com`, `fb.watch` | `fdown.net` |
+
+> [!NOTE]
+> Fetcho does not host, store, download, or distribute any video content. It only routes URLs through publicly available third-party downloader services.
 
 ## Features
 
-- **Auto-detection**: Reads clipboard on popup open and detects supported platforms
-- **Multi-platform support**: Instagram, Twitter/X, and YouTube Shorts
-- **3-second countdown**: Auto-triggers download with an option to cancel
-- **Manual paste**: Paste URLs directly if clipboard detection is skipped
-- **Content script automation**: Auto-fills URL inputs and clicks download buttons on downloader sites
-- **Clean popup UI**: Minimal, accessible interface with platform badges
+- **Content script automation** -- downloader sites are pre-filled and submitted without user interaction
+- **Platform auto-detection** -- paste a URL; Fetcho identifies the platform and routes it to the correct downloader
+- **One-click paste** -- the Paste button reads your clipboard and fills the input in a single tap
+- **Dark / Light theme** -- toggle persisted to `chrome.storage.local`; respects OS-level preference
+- **Minimal popup UI** -- tiny popup with straightforward functionality, nothing extraneous or distracting
+
+### Load into Browser
+
+1. Download latest release of Fetcho and unpack it
+2. Open `chrome://extensions` or `brave://extensions` in your browser
+3. Enable **Developer mode** (toggle in the top-right corner)
+4. Click **Load unpacked**
+5. Select the `dist/` folder from this project
+6. The Fetcho icon appears in your browser toolbar
+
+## Usage
+
+1. Navigate to any supported social media site and copy a video URL
+2. Click the Fetcho icon in your browser toolbar
+3. Click the **Paste** button to pull the URL from your clipboard, or type / paste it manually
+4. The popup detects the platform and shows a color-coded badge
+5. Click **Download** -- Fetcho opens the appropriate downloader site in a new tab
+6. The content script auto-fills the URL and clicks the download button; the file download begins
+
+> [!TIP]
+> If the Paste button does not work, the URL input also accepts manual paste (Ctrl+V / Cmd+V).
+
+## How It Works
+
+### Popup Flow
+
+```
+                    User copies a video URL
+                               |
+                    Clicks the extension icon
+                               |
+                        Pastes the link
+                               |
+               detectPlatform() identifies the platform
+                               |
+               User clicks the [Download] button
+                               |
+          Extension opens the downloader site and runs the script
+```
 
 ## Tech Stack
 
 | Technology | Purpose |
 |---|---|
-| TypeScript | Type-safe extension code |
-| Vite | Fast bundling and HMR during development |
+| TypeScript 5.4 | Type-safe extension code |
+| Vite 5.4 | Fast bundling with HMR during development |
 | CRXJS Vite Plugin | Manifest V3 extension build tooling |
 | Chrome Extension APIs | `storage`, `tabs`, `clipboardRead` |
-| CSS Variables | Theming and consistent styling |
+| CSS Custom Properties | Light / dark theme system |
 
 ## Project Structure
 
 ```
 fetcho/
 ├── src/
-│   ├── assets/            # Extension icons (16px, 48px, 128px)
-│   ├── background/        # Service worker (install lifecycle)
-│   ├── content/           # Content scripts per downloader site
-│   │   ├── igram.ts       # Instagram downloader automation
-│   │   ├── ssstwitter.ts  # Twitter/X downloader automation
-│   │   └── ytshorts.ts    # YouTube Shorts downloader automation
-│   ├── popup/             # Extension popup UI
-│   │   ├── index.html     # Popup markup
-│   │   ├── index.ts       # Popup logic (clipboard, countdown, download)
-│   │   └── style.css      # Popup styles
-│   └── shared/            # Shared utilities
-│       ├── content-utils.ts  # DOM helpers (wait, fill, click)
-│       ├── platforms.ts      # Platform configs and detection
-│       └── types.ts          # TypeScript interfaces
-├── dist/                  # Build output (load this into Chrome)
+│   ├── assets/                  # Logos (light/dark SVGs) and icons (16, 48, 128 px)
+│   ├── background/
+│   │   └── index.ts             # Service worker -- install lifecycle logging
+│   ├── content/
+│   │   ├── content-factory.ts   # Shared automation logic (wait, fill, click)
+│   │   ├── igram.ts             # Instagram -> igram.world
+│   │   ├── ssstwitter.ts        # Twitter/X  -> ssstwitter.com
+│   │   ├── ytshorts.ts          # YouTube    -> ytshortsdl.io
+│   │   ├── snaptik.ts           # TikTok     -> ssstik.io
+│   │   ├── rapidsave.ts         # Reddit     -> rapidsave.com
+│   │   └── fdown.ts             # Facebook   -> fdown.net
+│   ├── popup/
+│   │   ├── icons.ts             # SVG icon components (info, cross, warn, check)
+│   │   ├── index.html           # Popup markup
+│   │   ├── index.ts             # Popup logic (paste, detect, download, theme)
+│   │   └── style.css            # Popup styles with light/dark theme variables
+│   └── shared/
+│       ├── content-utils.ts     # DOM helpers: waitForElement, fillInput, findButton
+│       ├── platforms.ts         # Platform configs and detectPlatform()
+│       └── types.ts             # Shared TypeScript interfaces
+├── dist/                        # Build output (load this into the browser)
 ├── package.json
 ├── tsconfig.json
-└── vite.config.ts         # Vite + CRXJS manifest config
+└── vite.config.ts               # Vite config with CRXJS manifest declaration
 ```
 
 ## Getting Started
@@ -86,11 +149,15 @@ fetcho/
 ### Prerequisites
 
 - Node.js 18 or later
-- A Chromium-based browser (Chrome, Edge, Brave, etc.)
+- A Chromium-based browser (Chrome, Edge, Brave, Opera, etc.)
 
 ### Installation
 
 ```bash
+# Clone the repository
+git clone https://github.com/your-username/fetcho.git
+cd fetcho
+
 # Install dependencies
 npm install
 
@@ -98,61 +165,87 @@ npm install
 npm run build
 ```
 
-The compiled extension will be output to the `dist/` directory.
+The compiled extension is placed in the `dist/` directory.
 
-### Load into Browser
+### Content Script Automation
 
-1. Open your browser and navigate to `chrome://extensions/`
-2. Enable **Developer mode** (toggle in the top-right corner)
-3. Click **Load unpacked**
-4. Select the `dist/` folder from this project
-5. The extension icon will appear in your toolbar
+Each downloader site has a dedicated content script (e.g. `igram.ts` for Instagram). Each script calls the shared `runContentScript()` factory function and then works with the specific service's DOM:
 
-## Usage
+```typescript
+// Example: src/content/igram.ts
+import { runContentScript } from "./content-factory";
 
-1. Copy a video URL from Instagram, Twitter/X, or YouTube Shorts
-2. Click the extension icon in your toolbar
-3. The popup will auto-detect the platform and start a 3-second countdown
-4. Click **Cancel** to stop the auto-trigger, or let it proceed
-5. A new tab opens on the downloader site with the URL pre-filled and download initiated
+runContentScript({
+  platformId: "instagram",
+  waitSelector: 'input[type="text"], input[type="url"], #url',
+  inputSelectors: ["#url", 'input[type="text"]', 'input[type="url"]'],
+  buttonPattern: /download|submit|search|get/i,
+  siteName: "igram.world",
+});
+```
 
-You can also paste URLs manually into the input field and click **Download**.
+The factory function:
 
-## How It Works
+1. Reads `downloadUrl` and `platformId` from `chrome.storage.local`
+2. Clears the storage to prevent re-triggering
+3. Waits for a matching input field to appear (up to 5 seconds)
+4. Sets the input value using a native setter to trigger framework listeners
+5. Dispatches `input` and `change` DOM events
+6. Waits 500 ms, then finds and clicks the download button
 
-1. **Clipboard Detection**: On popup open, the extension reads your clipboard and checks if the URL matches a supported platform pattern
-2. **Platform Routing**: The detected platform determines which downloader service to use:
-   - Instagram -> `igram.world`
-   - Twitter/X -> `ssstwitter.com`
-   - YouTube Shorts -> `ytshortsdl.io`
-3. **Storage Handoff**: The URL and platform ID are stored in `chrome.storage.local`
-4. **Content Script Automation**: A content script on the downloader site reads the stored URL, fills the input field, and clicks the download button
+This pattern keeps each content script to under 10 lines while supporting any number of downloader sites.
+
+## Configuration
+
+All configuration lives in `vite.config.ts` where the extension manifest is declared:
+
+- **Content script matches** -- update the `content_scripts` array to add or modify downloader site injection rules
+- **Host permissions** -- update the `host_permissions` array to grant access to additional domains
+- **Platform definitions** -- add or edit entries in `src/shared/platforms.ts` to support new social networks
+
+Theme preference is automatically persisted to `chrome.storage.local` under the `theme` key.
 
 ## Permissions
 
-| Permission | Reason |
+| Permission | Justification |
 |---|---|
-| `clipboardRead` | Auto-detect video URLs from clipboard |
-| `storage` | Pass URL and platform data between popup and content scripts |
-| `tabs` | Open downloader sites in new tabs |
+| `clipboardRead` | Read the clipboard when the Paste button is clicked |
+| `storage` | Pass the URL and platform ID from the popup to content scripts |
+| `tabs` | Open the downloader site in a new browser tab |
 
 > [!IMPORTANT]
-> This extension routes URLs through third-party downloader services. It does not host or process any video content itself. Use responsibly and respect content creators' rights.
+> Fetcho uses only the minimum set of permissions required for its functionality. The extension makes no network requests of its own -- all data flows through standard Chrome extension APIs and user gestures.
 
 ## Development
 
 ```bash
-# Start dev server with hot module reloading
+# Start Vite dev server with HMR
 npm run dev
 
-# Build for production
+# Type-check and build for production
 npm run build
 
-# Preview the build output
+# Preview the production build
 npm run preview
 ```
 
-During development, use `npm run dev` and reload the extension from `chrome://extensions/` after changes. The CRXJS plugin supports HMR for popup and content scripts.
+During development, run `npm run dev` and load the `dist/` folder as an unpacked extension. Reload the extension from `chrome://extensions/` after each build. The CRXJS Vite plugin provides HMR for the popup and content scripts.
+
+### Adding a New Platform
+
+1. Add the platform definition to `src/shared/platforms.ts` (URL pattern, target URL, badge color)
+2. Create a content script in `src/content/` that calls `runContentScript()` with the appropriate selectors
+3. Register the content script match and host permission in `vite.config.ts`
+4. Rebuild and reload the extension
+
+## Contributing
+
+Contributions are welcome. Please open an issue first to discuss the change you would like to make.
+
+- Fork the repository
+- Create a feature branch
+- Run `npm run build` to verify the extension compiles
+- Submit a pull request
 
 ## License
 
