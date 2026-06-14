@@ -9,10 +9,11 @@ async function autoFillAndDownload() {
 
   await chrome.storage.local.remove(["downloadUrl", "platformId"]);
 
-  await waitForElement('input[type="text"], input[type="url"], #url', 5000);
+  await waitForElement('input[type="text"], input[type="url"], #url, #video', 5000);
 
   const input =
     document.querySelector<HTMLInputElement>("#url") ||
+    document.querySelector<HTMLInputElement>("#video") ||
     document.querySelector<HTMLInputElement>('input[type="text"]') ||
     document.querySelector<HTMLInputElement>('input[type="url"]');
 
@@ -25,7 +26,7 @@ async function autoFillAndDownload() {
 
   await delay(500);
 
-  const downloadBtn = findButton(/download|fetch|get/i);
+  const downloadBtn = findButton(/download|fetch|get|start/i);
   if (downloadBtn) {
     downloadBtn.click();
   }
