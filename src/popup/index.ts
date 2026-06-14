@@ -1,5 +1,6 @@
 import { detectPlatform } from "../shared/platforms";
 import { PopupState } from "../shared/types";
+import { ICONS, type IconName } from "./icons";
 
 const detectedSection = document.getElementById("detected-section")!;
 const platformBadge = document.getElementById("platform-badge")!;
@@ -28,12 +29,12 @@ function isValidUrl(str: string): boolean {
   }
 }
 
-function setTip(msg: string, autoClear = true) {
+function setTip(msg: string, icon?: IconName, autoClear = true) {
   if (tipTimeout) clearTimeout(tipTimeout);
-  tipText.textContent = msg;
+  tipText.innerHTML = msg + (icon ? ` ${ICONS[icon]}` : "");
   if (autoClear) {
     tipTimeout = setTimeout(() => {
-      tipText.textContent = "Paste a video link to get started";
+      tipText.innerHTML = "Paste a video link to get started";
       tipTimeout = null;
     }, 3000);
   }
@@ -56,17 +57,17 @@ function setState(state: PopupState) {
 async function triggerDownload() {
   const url = urlInput.value.trim() || currentUrl;
   if (!url || !isValidUrl(url)) {
-    setTip("Please enter a valid URL");
+    setTip("Please enter a valid URL", "info");
     return;
   }
 
   const platform = detectPlatform(url);
   if (!platform) {
-    setTip("Unsupported platform");
+    setTip("Unsupported platform", "cross");
     return;
   }
 
-  setTip(`Opening ${platform.name} downloader...`, false);
+  setTip(`Opening ${platform.name} downloader...`, undefined, false);
 
   await chrome.storage.local.set({ downloadUrl: url, platformId: platform.id });
 
@@ -84,7 +85,7 @@ pasteBtn.addEventListener("click", async () => {
       urlInput.dispatchEvent(new Event("input", { bubbles: true }));
     }
   } catch {
-    setTip("Could not read clipboard");
+    setTip("Could not read clipboard", "warn");
   }
 });
 
@@ -101,14 +102,14 @@ urlInput.addEventListener("input", () => {
       detectedSection.classList.remove("hidden");
       platformBadge.textContent = platform.name;
       platformBadge.style.backgroundColor = platform.color;
-      setTip(`${platform.name} detected ✓`, false);
+      setTip("Platform detected", "check", false);
     } else {
       detectedSection.classList.add("hidden");
-      setTip("URL not supported yet");
+      setTip("URL not supported yet", "cross");
     }
   } else if (url && !isValidUrl(url)) {
     detectedSection.classList.add("hidden");
-    setTip("Invalid URL format");
+    setTip("Invalid URL format", "cross");
   } else {
     detectedSection.classList.add("hidden");
     setState("idle");
