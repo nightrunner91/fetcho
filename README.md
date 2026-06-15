@@ -1,4 +1,4 @@
-# <p align="center">Fetcho</p>
+# <p align="center"><img src="src/assets/fetcho-logo-small.svg" width="24"> Fetcho</p>
 
 <p align="center">
   <strong>A Chromium browser extension that simplifies video downloads from social media.</strong>
