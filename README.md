@@ -65,12 +65,12 @@ Six platforms are supported out of the box.
 
 ## Load into Browser
 
-1. Download latest release of Fetcho and unpack it
+1. Download <a href="https://github.com/nightrunner91/fetcho/releases">latest release</a> of Fetcho and unpack it
 2. Open `chrome://extensions` or `brave://extensions` in your browser
 3. Enable **Developer mode** (toggle in the top-right corner)
 4. Click **Load unpacked**
-5. Select the `dist/` folder from this project
-6. The Fetcho icon appears in your browser toolbar
+5. Select unpacked folder in explorer
+6. Done! (the Fetcho icon appears in your browser toolbar)
 
 ## Usage
 
