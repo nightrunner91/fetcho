@@ -1,12 +1,13 @@
 import { defineConfig } from "vite";
 import { crx, defineManifest } from "@crxjs/vite-plugin";
 import { join } from "path";
+import pkg from "./package.json";
 
 const manifest = defineManifest(async () => ({
   manifest_version: 3,
   name: "Fetcho",
   description: "Auto-download videos from Instagram, Twitter/X, YouTube Shorts, TikTok, Reddit, and Facebook",
-  version: "1.0.0",
+  version: pkg.version,
   action: {
     default_popup: "src/popup/index.html",
     default_icon: {
