@@ -5,6 +5,11 @@
 </p>
 
 <p align="center">
+  <img src="src/assets/fetcho-preview-light.png" alt="Fetcho Preview (Light)">
+  <img src="src/assets/fetcho-preview-dark.png" alt="Fetcho Preview (Dark)">
+</p>
+
+<p align="center">
   <strong><img src="https://flagcdn.com/w20/us.png" width="20"> English</strong> | <a href="README.ru.md"><img src="https://flagcdn.com/w20/ru.png" width="20"> Russian</a>
 </p>
 
@@ -41,7 +46,7 @@
 
 Fetcho is a lightweight Chromium browser extension (Manifest V3). It acts as a smart intermediary: you paste a video link, Fetcho opens the correct downloader site with that link pre-filled, and a content script clicks the download button for you. No manual tab-hopping, no copy-paste between sites.
 
-Six platforms are supported out of the box.
+Six platforms are supported out of the box:
 
 | Platform | URL Patterns | Routes To |
 |---|---|---|
@@ -66,7 +71,10 @@ Six platforms are supported out of the box.
 ## Load into Browser
 
 1. Download <a href="https://github.com/nightrunner91/fetcho/releases">latest release</a> of Fetcho and unpack it
-2. Open `chrome://extensions` or `brave://extensions` in your browser
+2. Open extensions tab in your browser:
+    - `chrome://extensions` for Google Chrome
+    - `brave://extensions` for Brave
+    - `edge://extensions` for Microsoft Edge
 3. Enable **Developer mode** (toggle in the top-right corner)
 4. Click **Load unpacked**
 5. Select unpacked folder in explorer

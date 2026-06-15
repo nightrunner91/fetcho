@@ -5,11 +5,16 @@
 </p>
 
 <p align="center">
+  <img src="src/assets/fetcho-preview-light.png" alt="Fetcho Preview (Light)">
+  <img src="src/assets/fetcho-preview-dark.png" alt="Fetcho Preview (Dark)">
+</p>
+
+<p align="center">
   <a href="README.md"><img src="https://flagcdn.com/w20/us.png" width="20"> English</a> | <strong><img src="https://flagcdn.com/w20/ru.png" width="20"> Русский</strong>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Версия-1.0.0-blue?style=for-the-badge" alt="Версия">
+  <img src="https://img.shields.io/badge/Версия-1.1.2-blue?style=for-the-badge" alt="Версия">
   <img src="https://img.shields.io/badge/Лицензия-MIT-green?style=for-the-badge" alt="Лицензия">
   <img src="https://img.shields.io/badge/Node.js-%3E%3D18-6da55f?style=for-the-badge&logo=node.js" alt="Node.js">
   <img src="https://img.shields.io/badge/TypeScript-5.4-3178C6?style=for-the-badge&logo=typescript" alt="TypeScript">
@@ -40,9 +45,9 @@
 
 ## Обзор
 
-Fetcho — лёгкое расширение для браузера Chromium (Manifest V3). Расширение работает как интеллектуальный посредник: вы вставляете ссылку, Fetcho открывает нужный сайт-загрузчик с уже вставленной ссылкой, а контент-скрипт нажимает кнопку загрузки. Никаких ручных переключений между вкладками и копирований между сайтами.
+Fetcho — лёгкое расширение для браузера Chromium (Manifest V3). Расширение работает как умный посредник: вы вставляете ссылку, Fetcho открывает нужный сайт-загрузчик с уже вставленной ссылкой, а контент-скрипт нажимает кнопку загрузки. Никаких ручных переключений между вкладками и копирований ссылок между сайтами.
 
-Из коробки поддерживаются шесть платформ.
+Из коробки поддерживаются шесть платформ:
 
 | Платформа | Шаблоны ссылок | Перенаправляется на |
 |---|---|---|
@@ -67,7 +72,10 @@ Fetcho — лёгкое расширение для браузера Chromium (M
 ## Загрузка в браузер
 
 1. Скачайте <a href="https://github.com/nightrunner91/fetcho/releases">последний релиз</a> Fetcho и распакуйте его
-2. Откройте браузер и перейдите на `chrome://extensions` или `brave://extensions`
+2. Откройте страницу расширений в браузере:
+    - `chrome://extensions` для Google Chrome
+    - `brave://extensions` для Brave
+    - `edge://extensions` для Microsoft Edge
 3. Включите **Режим разработчика** (переключатель в правом верхнем углу)
 4. Нажмите **Загрузить распакованное расширение**
 5. Выберите распакованную папку в проводнике
